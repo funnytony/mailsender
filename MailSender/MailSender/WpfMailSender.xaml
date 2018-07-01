@@ -1,0 +1,53 @@
+﻿<Window x:Class="MailSender.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MailSender"
+        mc:Ignorable="d"
+        Title="MainWindow"
+        Height="450" Width="800"
+        Background="{DynamicResource BlueGradient}">
+    <DockPanel>
+    <Grid DockPanel.Dock="Left">
+            <Label Content="Логин:"
+                   Foreground="Black"
+                   HorizontalAlignment="Left"
+                   Margin="56,10,0,0"/>
+            <TextBox x:Name="UserLoginTextBox"
+                 HorizontalAlignment="Left"
+                 Height="25"
+                 MinWidth="120"
+                 Margin="56,25,0,369"
+                 TextWrapping="Wrap"/>
+            <Label Content="Пароль:"
+                   Foreground="Black"
+                   HorizontalAlignment="Left"
+                   Margin="56,59,0,0"/>
+            <PasswordBox x:Name="UserPassworBox"
+                     HorizontalAlignment="Left"
+                 Height="25"
+                 MinWidth="120"
+                 Margin="56,74,0,320"/>
+        <Button
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Width="78"
+            Margin="150,127,10,0"            
+            Click="Button_Click">
+            <Button.Content>
+                <StackPanel>
+                    <Label Content="Send"/>
+                    <Image></Image>
+                </StackPanel>
+            </Button.Content>
+        </Button>
+    </Grid>
+        <StackPanel DockPanel.Dock="Right">
+            <Label Foreground="Black" Content="Заголовок"/>
+            <TextBox x:Name="TitleTextBox" Height="25"/>
+            <Label Foreground="Black" Content="Сообщение:"/>
+            <TextBox x:Name="MessageTextBox" TextWrapping="Wrap"/>
+        </StackPanel>
+    </DockPanel>
+</Window>
