@@ -12,7 +12,7 @@
         Topmost="True"
         WindowStartupLocation="CenterOwner"
         WindowStyle="None"
-        Background="{DynamicResource NormalBorderBrush}"
+        
         >
     <DockPanel>
         <DockPanel DockPanel.Dock="Top">

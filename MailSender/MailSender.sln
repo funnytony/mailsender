@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2035
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MailSender", "MailSender\MailSender.csproj", "{D1AD08CF-6791-42B9-85DE-FAE057A31A61}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MailSender", "MailSender\MailSender.csproj", "{DAF5EA42-E2B4-428E-8E3E-F51C2E2176C1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PasswordDll", "PasswordDll\PasswordDll.csproj", "{8B9F0FAD-50AE-4252-BE9C-9DE0CD621883}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TabSwitcher", "TabSwitcher\TabSwitcher.csproj", "{C337FC5F-EB57-464D-B9E8-E6751C407FC0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +15,23 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D1AD08CF-6791-42B9-85DE-FAE057A31A61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D1AD08CF-6791-42B9-85DE-FAE057A31A61}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D1AD08CF-6791-42B9-85DE-FAE057A31A61}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D1AD08CF-6791-42B9-85DE-FAE057A31A61}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DAF5EA42-E2B4-428E-8E3E-F51C2E2176C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAF5EA42-E2B4-428E-8E3E-F51C2E2176C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAF5EA42-E2B4-428E-8E3E-F51C2E2176C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAF5EA42-E2B4-428E-8E3E-F51C2E2176C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B9F0FAD-50AE-4252-BE9C-9DE0CD621883}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B9F0FAD-50AE-4252-BE9C-9DE0CD621883}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B9F0FAD-50AE-4252-BE9C-9DE0CD621883}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B9F0FAD-50AE-4252-BE9C-9DE0CD621883}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C337FC5F-EB57-464D-B9E8-E6751C407FC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C337FC5F-EB57-464D-B9E8-E6751C407FC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C337FC5F-EB57-464D-B9E8-E6751C407FC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C337FC5F-EB57-464D-B9E8-E6751C407FC0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {E309E71B-8E7B-40C8-B728-B8B050329E9D}
+		SolutionGuid = {C5EC6BF2-E2B1-4825-B564-72F513F48934}
 	EndGlobalSection
 EndGlobal

@@ -1,34 +1,57 @@
-﻿
+﻿using System.Collections.Generic;
 using System.Windows;
-using System.Net.Mail;
-using System.Net;
-using System;
+using System.Windows.Controls;
+using System.Windows.Documents;
 
 namespace MailSender
 {
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class WpfMailSender : Window
     {
-        public MainWindow()
+        public WpfMailSender()
         {
             InitializeComponent();
-            
         }
 
-        private void Button_Click(object sender, RoutedEventArgs eve)
-        {           
+        private void TabSwitcherControl_OnBack(object sender, RoutedEventArgs e)
+        {
+            if (MainTabControl.SelectedIndex == 0) return;
+            MainTabControl.SelectedIndex--;
+        }
 
-            var login = UserLoginTextBox.Text;
-            var pass = UserPassworBox.Password;
+        private void TabSwitcherControl_OnForward(object sender, RoutedEventArgs e)
+        {
+            if (MainTabControl.SelectedIndex == MainTabControl.Items.Count - 1) return;
+            MainTabControl.SelectedIndex++;
+        }
 
-            var title = TitleTextBox.Text;
-            var message = MessageTextBox.Text;
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if(IsRichBoxEmpty(MessageTextBox))
+            {
+                var message = new WindowMessage("Не задан текст сообщения");
+                message.ShowDialog();
+                MainTabControl.SelectedIndex = 2;
+                return;
+            }
+            EmailSenderConfig.smtpServer = ((KeyValuePair<string, int>)ServerComboBox.SelectedItem).Key;
+            EmailSenderConfig.smtpPort = ((KeyValuePair<string, int>)ServerComboBox.SelectedItem).Value;
+            EmailSenderConfig.from = ((KeyValuePair<string, string>)SenderComboBox.SelectedItem).Key;
+        }
 
-            var emailSender = new EmailSendServiceClass("user@gmail.com");
-            emailSender.SendEmail(login, pass, title, message);
+        private bool IsRichBoxEmpty(RichTextBox richTextBox)
+        {
+            if (richTextBox.Document.Blocks.Count == 0) return true;
+            TextPointer startPointer = richTextBox.Document.ContentStart.GetNextInsertionPosition(LogicalDirection.Forward);
+            TextPointer endPointer = richTextBox.Document.ContentEnd.GetNextInsertionPosition(LogicalDirection.Backward);
+            return startPointer.CompareTo(endPointer) == 0;
+        }
 
+        private void Schedule_Click(object sender, RoutedEventArgs e)
+        {
+            MainTabControl.SelectedIndex = 1;
         }
     }
 }
