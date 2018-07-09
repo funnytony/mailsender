@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Emails>
+  <Email>
+    <Id>1</Id>
+    <Name>Петров Сегрей Васильевич</Name>
+    <Value>some@gmail.com</Value>
+  </Email>
+  <Email>
+    <Id>2</Id>
+    <Name>Ибрагимов Арсен Муратович</Name>
+    <Value>qwe@gmail.com</Value>
+  </Email>
+</Emails> 

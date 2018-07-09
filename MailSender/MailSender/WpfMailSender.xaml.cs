@@ -15,18 +15,7 @@ namespace MailSender
             InitializeComponent();
         }
 
-        private void TabSwitcherControl_OnBack(object sender, RoutedEventArgs e)
-        {
-            if (MainTabControl.SelectedIndex == 0) return;
-            MainTabControl.SelectedIndex--;
-        }
-
-        private void TabSwitcherControl_OnForward(object sender, RoutedEventArgs e)
-        {
-            if (MainTabControl.SelectedIndex == MainTabControl.Items.Count - 1) return;
-            MainTabControl.SelectedIndex++;
-        }
-
+        
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             if(IsRichBoxEmpty(MessageTextBox))
@@ -48,10 +37,6 @@ namespace MailSender
             TextPointer endPointer = richTextBox.Document.ContentEnd.GetNextInsertionPosition(LogicalDirection.Backward);
             return startPointer.CompareTo(endPointer) == 0;
         }
-
-        private void Schedule_Click(object sender, RoutedEventArgs e)
-        {
-            MainTabControl.SelectedIndex = 1;
-        }
+        
     }
 }

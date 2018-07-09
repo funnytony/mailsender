@@ -4,21 +4,32 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:TabSwitcher="clr-namespace:TabSwitcher;assembly=TabSwitcher"
         xmlns:local="clr-namespace:MailSender"
+        xmlns:View="clr-namespace:MailSender.Views"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    
+        Title="MainWindow" Height="450" Width="800"
+        DataContext="{Binding Main, Source={StaticResource Locator}}">    
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="File">
-                <MenuItem Header="Exit"/>
+                <MenuItem Header="Exit" Command="{local:ApplicationCloseCommand}"/>
             </MenuItem>
         </Menu>
         <ToolBar DockPanel.Dock="Bottom">
-            <TabSwitcher:TabSwitcherControl Back="TabSwitcherControl_OnBack" Forward="TabSwitcherControl_OnForward"></TabSwitcher:TabSwitcherControl>
+            <TabSwitcher:TabSwitcherControl>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Back">
+                        <i:InvokeCommandAction Command="{Binding MoveTabBackdCommand}"/>
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="Forward">
+                        <i:InvokeCommandAction Command="{Binding MoveTabForwardCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </TabSwitcher:TabSwitcherControl>
         </ToolBar>
-        <TabControl Name="MainTabControl">
+        <TabControl Name="MainTabControl" SelectedIndex="{Binding CurrentTabIndex}">
 
             <TabItem Header="Рассылка">
                 <DockPanel>
@@ -44,7 +55,7 @@
                         </ToolBar>
                         <ToolBar>
                             <Label>Планировщик:</Label>
-                            <Button ToolTip="Планировщик" Click="Schedule_Click">
+                            <Button ToolTip="Планировщик" Command="{Binding ScheduleSwitchCommand}">
                                 <Image Source="src/Clock.ico" Height="15" Width="15" Margin="2"/>
                             </Button>
                         </ToolBar>
@@ -80,13 +91,8 @@
                             </Button>
                         </ToolBar>
                     </ToolBarTray>
-                    <DataGrid ItemsSource="{x:Static local:DataBase.Emails}" AutoGenerateColumns="False" IsReadOnly="True">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="#" Binding="{Binding Id}" Width="Auto"/>
-                            <DataGridTextColumn Header="Почта" Binding="{Binding Value}" Width="Auto"/>
-                            <DataGridTextColumn Header="ФИО" Binding="{Binding Name}" Width="*"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                    <View:SaveEmailView></View:SaveEmailView>
+                    <View:EmailInfo></View:EmailInfo>
                 </DockPanel>
             </TabItem>
             <TabItem Header="Планировщик">
