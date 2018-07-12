@@ -8,9 +8,13 @@
         xmlns:TabSwitcher="clr-namespace:TabSwitcher;assembly=TabSwitcher"
         xmlns:local="clr-namespace:MailSender"
         xmlns:View="clr-namespace:MailSender.Views"
+        xmlns:converters="clr-namespace:MailSender.Converters"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
-        DataContext="{Binding Main, Source={StaticResource Locator}}">    
+        DataContext="{Binding Main, Source={StaticResource Locator}}">
+    <Window.Resources>
+        <converters:ConverterRichBoxToString x:Key="RicBoxConverter"/>
+    </Window.Resources>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="File">
@@ -21,10 +25,10 @@
             <TabSwitcher:TabSwitcherControl>
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Back">
-                        <i:InvokeCommandAction Command="{Binding MoveTabBackdCommand}"/>
+                        <i:InvokeCommandAction Command="{Binding MoveTabBackdCommand}" />
                     </i:EventTrigger>
                     <i:EventTrigger EventName="Forward">
-                        <i:InvokeCommandAction Command="{Binding MoveTabForwardCommand}"/>
+                        <i:InvokeCommandAction Command="{Binding MoveTabForwardCommand}" CommandParameter="{Binding ElementName=MainTabControl}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </TabSwitcher:TabSwitcherControl>
@@ -58,7 +62,7 @@
                             <Button ToolTip="Планировщик" Command="{Binding ScheduleSwitchCommand}">
                                 <Image Source="src/Clock.ico" Height="15" Width="15" Margin="2"/>
                             </Button>
-                        </ToolBar>
+                        </ToolBar>                        
                         <ToolBar Band="1" >
                             <Label>Сервер:</Label>
                             <ComboBox x:Name="ServerComboBox" Width="150" ItemsSource="{x:Static local:SmtpServers.SmtpServersDictionary}" SelectedIndex="0">
@@ -90,6 +94,9 @@
                                 <Image Source="src/Delete.ico" Height="15" Width="15" Margin="2"/>
                             </Button>
                         </ToolBar>
+                        <ToolBar Band="2">
+                            <View:ToolBarWithComboBox Title="Отправители:" Items="{Binding local:Senders.SendersDictionary}"></View:ToolBarWithComboBox>
+                        </ToolBar>
                     </ToolBarTray>
                     <View:SaveEmailView></View:SaveEmailView>
                     <View:EmailInfo></View:EmailInfo>
@@ -111,7 +118,7 @@
                                 <TextBlock Text="Запланировать"/>
                             </StackPanel>
                         </Button>
-                        <Button Margin="0,3" Click="Button_Click" >
+                        <Button Margin="0,3" Command="{Binding SendEmailCommand}" >
                             <StackPanel Orientation="Horizontal">
                                 <Image Source="src/Mail.ico" Height="15" Margin="0,0,4,0"/>
                                 <TextBlock Text="Отправить сейчас"/>                                
@@ -121,9 +128,9 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Редактор сообщений">
-                <RichTextBox x:Name="MessageTextBox" >
-                    
-                </RichTextBox>
+                <local:BindableRichTextBox x:Name="MessageTextBox" Document="{Binding Message, Converter={StaticResource RicBoxConverter}}">
+                                      
+                </local:BindableRichTextBox>
             </TabItem>            
         </TabControl>
         

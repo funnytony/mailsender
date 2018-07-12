@@ -103,6 +103,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\ToolBarWithComboBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="WindowMessage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -116,6 +120,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ApplicationCloseCommand.cs" />
+    <Compile Include="BindableRichTextBox.cs" />
+    <Compile Include="Converters\ConverterRichBoxToString.cs" />
     <Compile Include="DataBase.cs" />
     <Compile Include="EmailSenderConfig.cs" />
     <Compile Include="EmailSendServiceClass.cs" />
@@ -136,6 +142,9 @@
     </Compile>
     <Compile Include="Views\SaveEmailView.xaml.cs">
       <DependentUpon>SaveEmailView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ToolBarWithComboBox.xaml.cs">
+      <DependentUpon>ToolBarWithComboBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="WindowMessage.xaml.cs" />
     <Compile Include="WpfMailSender.xaml.cs">
