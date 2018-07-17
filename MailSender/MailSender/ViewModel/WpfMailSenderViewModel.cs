@@ -15,10 +15,11 @@ namespace MailSender.ViewModel
         private Emails _currentEmail = new Emails();
         private int _currentTabIndex;
         private string _searchText;
-        private KeyValuePair<string, int> _smptServer;
-        private KeyValuePair<string, string> _sender;
+        private KeyValuePair<string, object> _smptServer;
+        private KeyValuePair<string, object> _sender;
         private string _message;
-
+        private readonly ObservableCollection<KeyValuePair<string, object>> _sendersInfo = new ObservableCollection<KeyValuePair<string, object>>(Senders.SendersDictionary);
+        
 
         public ObservableCollection<Emails> Emails { get => _emails; set => Set(ref _emails, value); }
 
@@ -28,26 +29,30 @@ namespace MailSender.ViewModel
 
         public string SearchText { get => _searchText; set => Set(ref _searchText, value); }
 
-        public KeyValuePair<string, int> SmptServer
+        public IEnumerable<KeyValuePair<string, object>> SendersInfo => _sendersInfo;
+
+        public KeyValuePair<string, object> SmptServer
         {
             get => _smptServer;
             set
             {
                 Set(ref _smptServer, value);
                 EmailSenderConfig.smtpServer = value.Key;
-                EmailSenderConfig.smtpPort = value.Value;
+                EmailSenderConfig.smtpPort = (int)value.Value;
             }
         }
 
         public string Message { get => _message; set => Set(ref _message, value); }
 
-        public KeyValuePair<string, string> Sender { get => _sender; set => Set(ref _sender, value); }
+        public KeyValuePair<string, object> Sender { get => _sender; set => Set(ref _sender, value); }
 
         public RelayCommand ReadAllEmailsCommand { get; }
 
         public RelayCommand<Emails> SaveEmailCommand { get; }
 
         public RelayCommand FindeEmailsCommand { get; }
+
+        public RelayCommand<KeyValuePair<string, object>> DeleteSenderCommand { get;  }
 
         public RelayCommand<object> MoveTabForwardCommand { get; }
 
@@ -63,6 +68,7 @@ namespace MailSender.ViewModel
             _dataAccessService = dataAccessService;
             ReadAllEmailsCommand = new RelayCommand(GetEmails);
             SaveEmailCommand = new RelayCommand<Emails>(SaveEmail);
+            DeleteSenderCommand = new RelayCommand<KeyValuePair<string, object>>(DeleteSender);
             MoveTabForwardCommand = new RelayCommand<object>(MoveTabForward, CanExecuteForward);
             MoveTabBackdCommand = new RelayCommand(MoveTabBack, CanExecuteBack);
             ScheduleSwitchCommand = new RelayCommand(ScheduleSwitch);
@@ -88,6 +94,12 @@ namespace MailSender.ViewModel
                 select email);
         }
 
+        private void DeleteSender(KeyValuePair<string, object> sender)
+        {
+            if (SendersInfo.Contains(sender)) _sendersInfo.Remove(sender);
+
+        }
+
         private void MoveTabForward(object tabControl)=>CurrentTabIndex++;
 
         private void MoveTabBack() => CurrentTabIndex--;
@@ -104,7 +116,7 @@ namespace MailSender.ViewModel
                 return;
             }
             EmailSenderConfig.message = _message;
-            (new EmailSendServiceClass(_sender.Key, _sender.Value)).SendEmail(_currentEmail.Value);
+            (new EmailSendServiceClass(_sender.Key, (string)_sender.Value)).SendEmail(_currentEmail.Value);
         }
 
         private bool CanExecuteForward(object tabControl) => CurrentTabIndex < ((TabControl)tabControl).Items.Count-1;

@@ -1,17 +1,8 @@
-﻿using System;
+﻿
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace MailSender.Views
 {
@@ -30,24 +21,99 @@ namespace MailSender.Views
             new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnTitleChanged)));
 
         public static readonly DependencyProperty ItemsProperty = DependencyProperty.Register("Items",
-            typeof(Dictionary<string, object>),
+            typeof(IEnumerable<KeyValuePair<string, object>>),
             typeof(ToolBarWithComboBox),
-            new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnItemsChanged)));
+            new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnItemsPropertyChanged)),
+            new ValidateValueCallback(OnValidateItemsProperty));
+
+        public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register("SelectedItem",
+            typeof(KeyValuePair<string, object>),
+            typeof(ToolBarWithComboBox),
+            new FrameworkPropertyMetadata(new KeyValuePair<string, object>(), new PropertyChangedCallback(OnSelectedItemPropertyChanged)),
+            new ValidateValueCallback(OnValidateSelectedItemProperty));
+
+        public static readonly DependencyProperty DeleteCommandParametrProperty = DependencyProperty.Register("DeleteCommandParametr",
+            typeof(KeyValuePair<string, object>),
+            typeof(ToolBarWithComboBox),
+            new FrameworkPropertyMetadata(new KeyValuePair<string, object>(), new PropertyChangedCallback(OnDeleteCommandParametrPropertyChanged)),
+            new ValidateValueCallback(OnValidateDeleteCommandParametrProperty));
+
+        public static readonly DependencyProperty AddCommandProperty = DependencyProperty.Register("AddCommand",
+            typeof(ICommand),
+            typeof(ToolBarWithComboBox));
+
+        public static readonly DependencyProperty DeleteCommandProperty = DependencyProperty.Register("DeleteCommand",
+            typeof(ICommand),
+            typeof(ToolBarWithComboBox));
+
+        public static readonly DependencyProperty EditeCommandProperty = DependencyProperty.Register("EditeCommand",
+            typeof(ICommand),
+            typeof(ToolBarWithComboBox));
 
         public string Title { get => (string)GetValue(TitleProperty); set => SetValue(TitleProperty, value); }
 
-        public Dictionary<string, object> Items { get => (Dictionary<string, object>)GetValue(ItemsProperty); set => SetValue(ItemsProperty, value); }
-        
+        public IEnumerable<KeyValuePair<string, object>> Items { get => (IEnumerable<KeyValuePair<string, object>>)GetValue(ItemsProperty); set => SetValue(ItemsProperty, value); }
+
+        public KeyValuePair<string, object> SelectedItem { get => (KeyValuePair<string, object>)GetValue(SelectedItemProperty); set => SetValue(SelectedItemProperty, value); }
+
+        public KeyValuePair<string, object> DeleteCommandParametr { get => (KeyValuePair<string, object>)GetValue(DeleteCommandParametrProperty); set => SetValue(DeleteCommandParametrProperty, value); }
+
+        public ICommand AddCommand
+        {
+            get => (ICommand)GetValue(AddCommandProperty);
+            set => SetValue(AddCommandProperty, value);
+        }
+
+        public ICommand DeleteCommand
+        {
+            get => (ICommand)GetValue(DeleteCommandProperty);
+            set => SetValue(DeleteCommandProperty, value);
+        }
+
+        public ICommand EditeCommand
+        {
+            get => (ICommand)GetValue(EditeCommandProperty);
+            set => SetValue(EditeCommandProperty, value);
+        }
+
+
         private static void OnTitleChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
         {
             ToolBarWithComboBox toolBar = (ToolBarWithComboBox)obj;
             toolBar.Title = args.NewValue.ToString();
         }
 
-        private static void OnItemsChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
+        private static void OnItemsPropertyChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
+        {
+            ToolBarWithComboBox toolBar = (ToolBarWithComboBox)obj;            
+            toolBar.Items = (IEnumerable<KeyValuePair<string, object>>)args.NewValue;
+        }
+
+        private static bool OnValidateItemsProperty (object value)
+        {
+            return (value == null?true: value is IEnumerable<KeyValuePair<string, object>>);
+        }
+
+        private static void OnSelectedItemPropertyChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
+        {
+            ToolBarWithComboBox toolBar = (ToolBarWithComboBox)obj;            
+            toolBar.SelectedItem = (KeyValuePair<string,object>)args.NewValue;
+        }
+
+        private static bool OnValidateSelectedItemProperty (object value)
+        {
+            return (value == null ? true : value is KeyValuePair<string, object>);
+        }
+
+        private static void OnDeleteCommandParametrPropertyChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
         {
             ToolBarWithComboBox toolBar = (ToolBarWithComboBox)obj;
-            toolBar.Items = (Dictionary<string, object>)args.NewValue;
+            toolBar.DeleteCommandParametr = (KeyValuePair<string, object>)args.NewValue;
+        }
+
+        private static bool OnValidateDeleteCommandParametrProperty(object value)
+        {
+            return (value == null ? true : value is KeyValuePair<string, object>);
         }
     }
 }

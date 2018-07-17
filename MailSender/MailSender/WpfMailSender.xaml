@@ -39,23 +39,11 @@
                 <DockPanel>
                     <ToolBarTray DockPanel.Dock="Top">
                         <ToolBar>
-                            <Label Content="Отправитель:"/>
-                            <ComboBox x:Name="SenderComboBox" Width="150" ItemsSource="{x:Static local:Senders.SendersDictionary}" SelectedIndex="0">
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Key}"/>
-                                    </DataTemplate>                                    
-                                </ComboBox.ItemTemplate>                                
-                            </ComboBox>
-                            <Button ToolTip="Добавить отправителя">
-                                <Image Source="src/Add.ico" Height="15" Width="15" Margin="2"/>
-                            </Button>
-                            <Button ToolTip="Редактировать отправителя">
-                                <Image Source="src/Edit.ico" Height="15" Width="15" Margin="2"/>
-                            </Button>
-                            <Button ToolTip="Удалить отправителя">
-                                <Image Source="src/Delete.ico" Height="15" Width="15" Margin="2"/>
-                            </Button>
+                            <View:ToolBarWithComboBox x:Name="SenderSelector" Title="Отправители:" 
+                                                      Items="{Binding SendersInfo}" 
+                                                      SelectedItem="{Binding Sender, Mode=TwoWay}"
+                                                      DeleteCommand="{Binding DeleteSenderCommand}"
+                                                      DeleteCommandParametr="{Binding SelectedItem, ElementName=SenderSelector}"></View:ToolBarWithComboBox>
                         </ToolBar>
                         <ToolBar>
                             <Label>Планировщик:</Label>
@@ -64,23 +52,7 @@
                             </Button>
                         </ToolBar>                        
                         <ToolBar Band="1" >
-                            <Label>Сервер:</Label>
-                            <ComboBox x:Name="ServerComboBox" Width="150" ItemsSource="{x:Static local:SmtpServers.SmtpServersDictionary}" SelectedIndex="0">
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Key}"/>
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                            </ComboBox>
-                            <Button ToolTip="Добавить сервер">
-                                <Image Source="src/Add.ico" Height="15" Width="15" Margin="2"/>
-                            </Button>
-                            <Button ToolTip="Редактировать сервер">
-                                <Image Source="src/Edit.ico" Height="15" Width="15" Margin="2"/>
-                            </Button>
-                            <Button ToolTip="Удалить сервер">
-                                <Image Source="src/Delete.ico" Height="15" Width="15" Margin="2"/>
-                            </Button>
+                            <View:ToolBarWithComboBox Title="Сервер:" Items="{x:Static local:SmtpServers.SmtpServersDictionary}" SelectedItem="{Binding SmptServer}"></View:ToolBarWithComboBox>
                         </ToolBar>                        
                         <ToolBar Band="1">
                             <Label>Список адресатов:</Label>
@@ -93,10 +65,7 @@
                             <Button ToolTip="Удалить адресата">
                                 <Image Source="src/Delete.ico" Height="15" Width="15" Margin="2"/>
                             </Button>
-                        </ToolBar>
-                        <ToolBar Band="2">
-                            <View:ToolBarWithComboBox Title="Отправители:" Items="{Binding local:Senders.SendersDictionary}"></View:ToolBarWithComboBox>
-                        </ToolBar>
+                        </ToolBar>                        
                     </ToolBarTray>
                     <View:SaveEmailView></View:SaveEmailView>
                     <View:EmailInfo></View:EmailInfo>

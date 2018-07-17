@@ -8,7 +8,7 @@ namespace MailSender
 {
     public static class SmtpServers
     {
-        public static Dictionary<string, int> SmtpServersDictionary { get; } = new Dictionary<string, int>
+        public static Dictionary<string, object> SmtpServersDictionary { get; } = new Dictionary<string, object>
         {
             {"smtp.gmail.com", 465 },
             {"smtp.mail.ru", 465 }

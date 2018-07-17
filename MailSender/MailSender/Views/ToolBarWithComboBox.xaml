@@ -5,27 +5,41 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MailSender.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             x:Name="ToolBarWithSelector">
     <Grid>
-        <ToolBar>
+        <Grid.RowDefinitions>            
+            <RowDefinition Height="20"/>            
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="50"/>
+            <ColumnDefinition Width="50"/>
+            <ColumnDefinition Width="50"/>
+        </Grid.ColumnDefinitions>
 
-            <Label Content="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:ToolBarWithComboBox}}, Path=Title}"/>
-            <ComboBox x:Name="SenderComboBox" Width="150" ItemsSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:ToolBarWithComboBox}}, Path=Items}" SelectedIndex="0">
+        <Label Grid.Column="0" Content="{Binding Path=Title, ElementName=ToolBarWithSelector}"/>
+        <ComboBox Grid.Column="1" x:Name="SenderComboBox" Width="150" ItemsSource="{Binding Path=Items, ElementName=ToolBarWithSelector}" 
+                      SelectedIndex="0"
+                      SelectedItem="{Binding Path=SelectedItem, ElementName=ToolBarWithSelector, Mode=TwoWay}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Key}"/>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
-            <Button ToolTip="Добавить отправителя">
+        <Button Grid.Column="2" ToolTip="Добавить отправителя" Command="{Binding Path=AddCommand, ElementName=ToolBarWithSelector}">
                 <Image Source="../src/Add.ico" Height="15" Width="15" Margin="2"/>
             </Button>
-            <Button ToolTip="Редактировать отправителя">
+        <Button Grid.Column="3" ToolTip="Редактировать отправителя" Command="{Binding Path=EditeCommand, ElementName=ToolBarWithSelector}">
                 <Image Source="../src/Edit.ico" Height="15" Width="15" Margin="2"/>
             </Button>
-            <Button ToolTip="Удалить отправителя">
+        <Button Grid.Column="4" ToolTip="Удалить отправителя"
+                Command="{Binding Path=DeleteCommand, ElementName=ToolBarWithSelector}"
+                CommandParameter="{Binding Path=DeleteCommandParametr, ElementName=ToolBarWithSelector}">
                 <Image Source="../src/Delete.ico" Height="15" Width="15" Margin="2"/>
             </Button>
-        </ToolBar>
+        
         </Grid>
 </UserControl>
