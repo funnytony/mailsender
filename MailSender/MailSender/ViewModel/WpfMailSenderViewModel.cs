@@ -97,6 +97,7 @@ namespace MailSender.ViewModel
         private void DeleteSender(KeyValuePair<string, object> sender)
         {
             if (SendersInfo.Contains(sender)) _sendersInfo.Remove(sender);
+            else _sendersInfo.Remove(_sender);
 
         }
 
