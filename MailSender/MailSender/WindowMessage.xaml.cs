@@ -9,16 +9,12 @@ namespace MailSender
     /// </summary>
     public partial class WindowMessage : Window
     {
-        public WindowMessage(string message)
+        public WindowMessage()
         {
-            InitializeComponent();
-            MessageLable.Content = message;
+            InitializeComponent();            
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
+        
 
         
     }

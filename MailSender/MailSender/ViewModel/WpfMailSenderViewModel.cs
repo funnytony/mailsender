@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using MailSender.Services;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -18,8 +19,13 @@ namespace MailSender.ViewModel
         private KeyValuePair<string, object> _smptServer;
         private KeyValuePair<string, object> _sender;
         private string _message;
-        private readonly ObservableCollection<KeyValuePair<string, object>> _sendersInfo = new ObservableCollection<KeyValuePair<string, object>>(Senders.SendersDictionary);
-        
+        private readonly ObservableCollection<KeyValuePair<string, object>> _sendersInfo;
+        private readonly ObservableCollection<KeyValuePair<string, object>> _smptInfo;
+        private Action ReqestCancel;
+        private double _progressBar;
+        private IProgress<double> _progress;
+        private ObservableCollection<Emails> _selectedEmails = new ObservableCollection<Emails>();
+
 
         public ObservableCollection<Emails> Emails { get => _emails; set => Set(ref _emails, value); }
 
@@ -30,6 +36,8 @@ namespace MailSender.ViewModel
         public string SearchText { get => _searchText; set => Set(ref _searchText, value); }
 
         public IEnumerable<KeyValuePair<string, object>> SendersInfo => _sendersInfo;
+
+        public IEnumerable<KeyValuePair<string, object>> SmptInfo => _smptInfo;
 
         public KeyValuePair<string, object> SmptServer
         {
@@ -46,13 +54,17 @@ namespace MailSender.ViewModel
 
         public KeyValuePair<string, object> Sender { get => _sender; set => Set(ref _sender, value); }
 
+        public double ProgressBar { get => _progressBar; set => Set(ref _progressBar, value); }
+
         public RelayCommand ReadAllEmailsCommand { get; }
 
         public RelayCommand<Emails> SaveEmailCommand { get; }
 
         public RelayCommand FindeEmailsCommand { get; }
 
-        public RelayCommand<KeyValuePair<string, object>> DeleteSenderCommand { get;  }
+        public RelayCommand<KeyValuePair<string, object>> DeleteSenderCommand { get; }
+
+        public RelayCommand<KeyValuePair<string, object>> DeleteServerCommand { get; }
 
         public RelayCommand<object> MoveTabForwardCommand { get; }
 
@@ -61,19 +73,30 @@ namespace MailSender.ViewModel
         public RelayCommand ScheduleSwitchCommand { get;  }
 
         public RelayCommand SendEmailCommand { get; }
+
+        public RelayCommand CancelSendEmailCommand { get; }
+
+        public RelayCommand<object> SelectEmailsCommand { get; }
         
 
         public WpfMailSenderViewModel(IDataAccessService dataAccessService)
         {
             _dataAccessService = dataAccessService;
+            _sendersInfo = new ObservableCollection<KeyValuePair<string, object>>(Senders.SendersDictionary);
+            _sender = _sendersInfo.FirstOrDefault();
+            _smptInfo = new ObservableCollection<KeyValuePair<string, object>>(SmtpServers.SmtpServersDictionary);
+            _smptServer = _smptInfo.FirstOrDefault();
             ReadAllEmailsCommand = new RelayCommand(GetEmails);
             SaveEmailCommand = new RelayCommand<Emails>(SaveEmail);
             DeleteSenderCommand = new RelayCommand<KeyValuePair<string, object>>(DeleteSender);
+            DeleteServerCommand = new RelayCommand<KeyValuePair<string, object>>(DeleteServer);
             MoveTabForwardCommand = new RelayCommand<object>(MoveTabForward, CanExecuteForward);
             MoveTabBackdCommand = new RelayCommand(MoveTabBack, CanExecuteBack);
             ScheduleSwitchCommand = new RelayCommand(ScheduleSwitch);
             FindeEmailsCommand = new RelayCommand(FindeEmails);
             SendEmailCommand = new RelayCommand(SendEmail);
+            CancelSendEmailCommand = new RelayCommand(CancelSendEmail);
+            SelectEmailsCommand = new RelayCommand<object>(SelectEmails);
 
         }
 
@@ -101,6 +124,13 @@ namespace MailSender.ViewModel
 
         }
 
+        private void DeleteServer(KeyValuePair<string, object> server)
+        {
+            if (SmptInfo.Contains(server)) _smptInfo.Remove(server);
+            else _smptInfo.Remove(_smptServer);
+
+        }
+
         private void MoveTabForward(object tabControl)=>CurrentTabIndex++;
 
         private void MoveTabBack() => CurrentTabIndex--;
@@ -111,13 +141,35 @@ namespace MailSender.ViewModel
         {
             if (string.IsNullOrEmpty(_message))
             {
-                var message = new WindowMessage("Не задан текст сообщения");
-                message.ShowDialog();
+                var messageView = new WindowMessage();
+                var message = new WindowMessageViewModel("Ошибка отправки", "Текст сообщения пуст");
+                message.ReqestClose += messageView.Close;
+                messageView.DataContext = message;
+                messageView.ShowDialog();                
                 CurrentTabIndex = 2;
                 return;
             }
             EmailSenderConfig.message = _message;
-            (new EmailSendServiceClass(_sender.Key, (string)_sender.Value)).SendEmail(_currentEmail.Value);
+            var emailSender = new EmailSendServiceClass(_sender.Key, (string)_sender.Value);
+            ReqestCancel += emailSender.Cancel;
+            if (_selectedEmails.Count > 1)
+            {
+                _progress = new Progress<double>(d => ProgressBar = d);
+                emailSender.SendEmails(_selectedEmails, _progress);
+            }
+            else emailSender.SendEmail(_currentEmail.Value);
+        }        
+
+        private void CancelSendEmail()
+        {
+            ReqestCancel?.Invoke();
+            ReqestCancel = null;
+        }
+
+        private void SelectEmails(object emails)
+        {
+            System.Collections.IList collection = (System.Collections.IList)emails;
+            _selectedEmails = new ObservableCollection<Emails>(collection.Cast<Emails>());
         }
 
         private bool CanExecuteForward(object tabControl) => CurrentTabIndex < ((TabControl)tabControl).Items.Count-1;

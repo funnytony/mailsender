@@ -21,8 +21,8 @@
 
         <Label Grid.Column="0" Content="{Binding Path=Title, ElementName=ToolBarWithSelector}"/>
         <ComboBox Grid.Column="1" x:Name="SenderComboBox" Width="150" ItemsSource="{Binding Path=Items, ElementName=ToolBarWithSelector}" 
-                      SelectedIndex="0"
-                      SelectedItem="{Binding Path=SelectedItem, ElementName=ToolBarWithSelector, Mode=TwoWay}">
+                      SelectedIndex="{Binding ElementName=ToolBarWithSelector, Path=Index}"
+                      SelectedItem="{Binding Path=SelectedItem, ElementName=ToolBarWithSelector}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Key}"/>

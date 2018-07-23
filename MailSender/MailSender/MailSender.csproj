@@ -130,12 +130,14 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>MailSenderDataClasses.dbml</DependentUpon>
     </Compile>
+    <Compile Include="SchedulerClass.cs" />
     <Compile Include="Senders.cs" />
     <Compile Include="Services\DataBaseAccessService.cs" />
     <Compile Include="Services\IDataAccessService.cs" />
     <Compile Include="Services\XmlFileAccessService.cs" />
     <Compile Include="SmtpServers.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="ViewModel\WindowMessageViewModel.cs" />
     <Compile Include="ViewModel\WpfMailSenderViewModel.cs" />
     <Compile Include="Views\EmailInfo.xaml.cs">
       <DependentUpon>EmailInfo.xaml</DependentUpon>

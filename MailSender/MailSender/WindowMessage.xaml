@@ -19,12 +19,12 @@
             <Button Content="X" DockPanel.Dock="Right"
                     IsCancel="True"
                     Padding="5,1"
-                    Click="Button_Click"></Button>
-            <Label Foreground="Black" Content="{Binding Title, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                    Command="{Binding CloseCommand}"></Button>
+            <Label Foreground="Black" Content="{Binding Title}"/>
         </DockPanel>
         <Grid>
             <Label x:Name="MessageLable"
-                   Content="Ошибка отправки сообщения"
+                   Content="{Binding Message}"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
                    Foreground="Black"/>
@@ -34,7 +34,7 @@
                     Margin="0,0,0,10"
                     Padding="30,1"
                     IsDefault="True"
-                    Click="Button_Click"/>
+                    Command="{Binding CloseCommand}"/>
         </Grid>
     </DockPanel>
 </Window>

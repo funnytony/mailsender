@@ -20,6 +20,11 @@ namespace MailSender.Views
             typeof(ToolBarWithComboBox),
             new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnTitleChanged)));
 
+        public static readonly DependencyProperty IndexProperty = DependencyProperty.Register("Index",
+            typeof(int),
+            typeof(ToolBarWithComboBox),
+            new FrameworkPropertyMetadata(0, new PropertyChangedCallback(OnIndexPropertyChanged)));
+
         public static readonly DependencyProperty ItemsProperty = DependencyProperty.Register("Items",
             typeof(IEnumerable<KeyValuePair<string, object>>),
             typeof(ToolBarWithComboBox),
@@ -52,6 +57,8 @@ namespace MailSender.Views
 
         public string Title { get => (string)GetValue(TitleProperty); set => SetValue(TitleProperty, value); }
 
+        public int Index { get=>(int)GetValue(IndexProperty); set=>SetValue(IndexProperty,value); }
+
         public IEnumerable<KeyValuePair<string, object>> Items { get => (IEnumerable<KeyValuePair<string, object>>)GetValue(ItemsProperty); set => SetValue(ItemsProperty, value); }
 
         public KeyValuePair<string, object> SelectedItem { get => (KeyValuePair<string, object>)GetValue(SelectedItemProperty); set => SetValue(SelectedItemProperty, value); }
@@ -81,6 +88,12 @@ namespace MailSender.Views
         {
             ToolBarWithComboBox toolBar = (ToolBarWithComboBox)obj;
             toolBar.Title = args.NewValue.ToString();
+        }
+
+        private static void OnIndexPropertyChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
+        {
+            ToolBarWithComboBox toolBar = (ToolBarWithComboBox)obj;
+            toolBar.Index = (int)args.NewValue;
         }
 
         private static void OnItemsPropertyChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)

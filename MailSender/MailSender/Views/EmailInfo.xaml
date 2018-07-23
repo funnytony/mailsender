@@ -29,9 +29,16 @@
                 </TextBox.InputBindings>
             </TextBox>            
         </DockPanel>
-        <DataGrid Grid.Row="2" IsReadOnly="True" ColumnWidth="*"
-                  ItemsSource="{Binding Emails}"
-                  SelectedItem="{Binding CurrentEmail}"/>
+        <DataGrid x:Name="dgEmails" Grid.Row="2" IsReadOnly="True" ColumnWidth="*"                  
+                  SelectedItem="{Binding CurrentEmail}"
+                  ItemsSource="{Binding Emails}">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <i:InvokeCommandAction Command="{Binding SelectEmailsCommand}" CommandParameter="{Binding ElementName=dgEmails, Path=SelectedItems}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+
+        </DataGrid>
         <Button Grid.Row="3" Content="Отобразить данные" FontWeight="Bold" Command="{Binding ReadAllEmailsCommand}"/>
             
     </Grid>

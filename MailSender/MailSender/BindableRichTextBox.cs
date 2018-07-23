@@ -22,6 +22,7 @@ namespace MailSender
             set
             {
                 this.SetValue(DocumentProperty, value);
+                base.Document = value;
             }
         }
 

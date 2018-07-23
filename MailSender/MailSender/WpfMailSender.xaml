@@ -40,8 +40,9 @@
                     <ToolBarTray DockPanel.Dock="Top">
                         <ToolBar>
                             <View:ToolBarWithComboBox x:Name="SenderSelector" Title="Отправители:" 
-                                                      Items="{Binding SendersInfo}" 
-                                                      SelectedItem="{Binding Sender, Mode=TwoWay}"
+                                                      Items="{Binding SendersInfo}"
+                                                      Index="0"
+                                                      SelectedItem="{Binding Sender, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                       DeleteCommand="{Binding DeleteSenderCommand}"
                                                       DeleteCommandParametr="{Binding SelectedItem, ElementName=SenderSelector}"></View:ToolBarWithComboBox>
                         </ToolBar>
@@ -52,7 +53,12 @@
                             </Button>
                         </ToolBar>                        
                         <ToolBar Band="1" >
-                            <View:ToolBarWithComboBox Title="Сервер:" Items="{x:Static local:SmtpServers.SmtpServersDictionary}" SelectedItem="{Binding SmptServer}"></View:ToolBarWithComboBox>
+                            <View:ToolBarWithComboBox x:Name="ServerSelector" Title="Сервер:"
+                                                      Items="{Binding SmptInfo}"
+                                                      Index="0"
+                                                      SelectedItem="{Binding SmptServer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                      DeleteCommand="{Binding DeleteServerCommand}"
+                                                      DeleteCommandParametr="{Binding SelectedItem, ElementName=ServerSelector}"></View:ToolBarWithComboBox>
                         </ToolBar>                        
                         <ToolBar Band="1">
                             <Label>Список адресатов:</Label>
@@ -93,13 +99,27 @@
                                 <TextBlock Text="Отправить сейчас"/>                                
                             </StackPanel>                            
                         </Button>
+                        <Button Margin="0,3" Command="{Binding CancelSendEmailCommand}" >
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="src/Delete.ico" Height="15" Margin="0,0,4,0"/>
+                                <TextBlock Text="Отмена отправки"/>
+                            </StackPanel>
+                        </Button>
                     </StackPanel>
+                    <DockPanel Grid.Column="2">
+                        <ProgressBar DockPanel.Dock="Bottom" Height="15" Value="{Binding ProgressBar, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></ProgressBar>
+                    </DockPanel>
                 </Grid>
             </TabItem>
             <TabItem Header="Редактор сообщений">
-                <local:BindableRichTextBox x:Name="MessageTextBox" Document="{Binding Message, Converter={StaticResource RicBoxConverter}}">
+                <RichTextBox x:Name="MessageTextBox">
+                    <FlowDocument>
+                        <Paragraph>
+                            <Run Text="{Binding Message, Mode=TwoWay}"/>
+                        </Paragraph>
+                    </FlowDocument>
                                       
-                </local:BindableRichTextBox>
+                </RichTextBox>
             </TabItem>            
         </TabControl>
         
